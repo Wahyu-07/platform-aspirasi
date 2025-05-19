@@ -10,7 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const postinganRoutes = require('./routes/postinganRoutes');
 const komentarRoutes = require('./routes/komentarRoutes');
 const interaksiRoutes = require('./routes/interaksiRoutes');
-const penggunaRoutes = require('./routes/penggunaRoutes'); // ✅ Tambahkan route pengguna
+const userRoutes = require('./routes/userRoutes'); // ✅ Tambahkan route pengguna
 const kategoriRoutes = require('./routes/kategoriRoutes');
 
 // Memuat variabel lingkungan dari file .env
@@ -28,7 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/postingan', postinganRoutes);
 app.use('/api/komentar', komentarRoutes);
 app.use('/api/interaksi', interaksiRoutes);
-app.use('/api/pengguna', penggunaRoutes); // ✅ Tambahkan endpoint pengguna
+app.use('/api/user', userRoutes); // ✅ Tambahkan endpoint pengguna
 app.use('/api/kategori', kategoriRoutes);
 
 // Koneksi ke database dan sinkronisasi 
@@ -47,7 +47,7 @@ async function connectDatabase() {
 connectDatabase();
 
 // Port
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server berjalan di http://localhost:${PORT}`);
 });

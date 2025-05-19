@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const { toWIB } = require('../utils/waktu'); // pastikan utils/waktu sudah ada
+const { toWIB } = require('../utils/waktu');
 
 module.exports = (sequelize) => {
-  const Komentar = sequelize.define('komentar', {
+  const Komentar = sequelize.define('Komentar', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -26,16 +26,15 @@ module.exports = (sequelize) => {
     },
     dibuat_pada: {
       type: DataTypes.DATE,
-      defaultValue: Sequelize.NOW,  // Gunakan Sequelize.NOW untuk nilai default waktu sekarang
+      defaultValue: Sequelize.NOW,
       get() {
-        // Menambahkan konversi waktu WIB pada saat pengambilan data
         const value = this.getDataValue('dibuat_pada');
-        return toWIB(value);  // Menggunakan fungsi toWIB untuk konversi ke WIB
+        return toWIB(value);
       }
     },
   }, {
     tableName: 'komentar',
-    timestamps: false,  // Tidak menggunakan createdAt dan updatedAt
+    timestamps: false,
   });
 
   Komentar.associate = (models) => {
@@ -44,7 +43,7 @@ module.exports = (sequelize) => {
       as: 'postingan',
     });
 
-    Komentar.belongsTo(models.Pengguna, {
+    Komentar.belongsTo(models.User, {
       foreignKey: 'id_penulis',
       as: 'penulis',
     });

@@ -9,8 +9,20 @@ module.exports = (sequelize) => {
       autoIncrement: true,
     },
     nama: {
-      type: DataTypes.STRING(50),  // Sesuaikan dengan VARCHAR(50)
+      type: DataTypes.STRING(20), // Sesuai dengan definisi VARCHAR(20)
       allowNull: false,
+      unique: true,
+      validate: {
+        isIn: [[
+          'Akademik',
+          'Fasilitas',
+          'Pelayanan',
+          'Administrasi',
+          'Keamanan',
+          'Kegiatan Kampus',
+          'Lainnya'
+        ]],
+      }
     },
   }, {
     tableName: 'kategori',

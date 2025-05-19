@@ -1,16 +1,16 @@
-const { Pengguna } = require('../models');
+const { User } = require('../models');
 
 // GET pengguna by NIM
 exports.getPenggunaByNim = async (req, res) => {
   try {
     const { nim } = req.params;
-    const pengguna = await Pengguna.findOne({ where: { nim } });
+    const user = await User.findOne({ where: { nim } });
 
-    if (!pengguna) {
+    if (!user) {
       return res.status(404).json({ error: 'Pengguna dengan NIM tersebut tidak ditemukan' });
     }
 
-    res.json(pengguna);
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: 'Gagal mengambil data pengguna berdasarkan NIM', detail: error.message });
   }
@@ -19,8 +19,8 @@ exports.getPenggunaByNim = async (req, res) => {
 // GET semua pengguna
 exports.getAllPengguna = async (req, res) => {
   try {
-    const pengguna = await Pengguna.findAll();
-    res.json(pengguna); // Tidak perlu melakukan konversi waktu karena sudah disesuaikan di model
+    const users = await User.findAll();
+    res.json(users);
   } catch (error) {
     res.status(500).json({ error: 'Gagal mengambil data pengguna', detail: error.message });
   }
@@ -29,12 +29,12 @@ exports.getAllPengguna = async (req, res) => {
 // GET pengguna by ID
 exports.getPenggunaById = async (req, res) => {
   try {
-    const pengguna = await Pengguna.findByPk(req.params.id);
-    if (!pengguna) {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
       return res.status(404).json({ error: 'Pengguna tidak ditemukan' });
     }
 
-    res.json(pengguna); // Tidak perlu melakukan konversi waktu karena sudah disesuaikan di model
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: 'Gagal mengambil data pengguna', detail: error.message });
   }
@@ -48,15 +48,8 @@ exports.createPengguna = async (req, res) => {
       return res.status(400).json({ error: 'Semua field wajib diisi' });
     }
 
-    const pengguna = await Pengguna.create({
-      nim,
-      nama,
-      email,
-      kata_sandi,
-      peran
-    });
-
-    res.status(201).json(pengguna); // Tidak perlu melakukan konversi waktu karena sudah disesuaikan di model
+    const user = await User.create({ nim, nama, email, kata_sandi, peran });
+    res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: 'Gagal membuat pengguna', detail: error.message });
   }
@@ -65,22 +58,22 @@ exports.createPengguna = async (req, res) => {
 // PUT update pengguna
 exports.updatePengguna = async (req, res) => {
   try {
-    const pengguna = await Pengguna.findByPk(req.params.id);
-    if (!pengguna) {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
       return res.status(404).json({ error: 'Pengguna tidak ditemukan' });
     }
 
     const { nim, nama, email, kata_sandi, peran } = req.body;
 
-    pengguna.nim = nim || pengguna.nim;
-    pengguna.nama = nama || pengguna.nama;
-    pengguna.email = email || pengguna.email;
-    pengguna.kata_sandi = kata_sandi || pengguna.kata_sandi;
-    pengguna.peran = peran || pengguna.peran;
+    user.nim = nim ?? user.nim;
+    user.nama = nama ?? user.nama;
+    user.email = email ?? user.email;
+    user.kata_sandi = kata_sandi ?? user.kata_sandi;
+    user.peran = peran ?? user.peran;
 
-    await pengguna.save();
+    await user.save();
 
-    res.json(pengguna); // Tidak perlu melakukan konversi waktu karena sudah disesuaikan di model
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: 'Gagal memperbarui pengguna', detail: error.message });
   }
@@ -89,12 +82,12 @@ exports.updatePengguna = async (req, res) => {
 // DELETE pengguna
 exports.deletePengguna = async (req, res) => {
   try {
-    const pengguna = await Pengguna.findByPk(req.params.id);
-    if (!pengguna) {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
       return res.status(404).json({ error: 'Pengguna tidak ditemukan' });
     }
 
-    await pengguna.destroy();
+    await user.destroy();
     res.json({ message: 'Pengguna berhasil dihapus' });
   } catch (error) {
     res.status(500).json({ error: 'Gagal menghapus pengguna', detail: error.message });

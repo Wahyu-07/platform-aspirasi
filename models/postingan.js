@@ -3,7 +3,7 @@ const { toWIB } = require('../utils/waktu');
 
 // Mendefinisikan model Postingan
 module.exports = (sequelize) => {
-  const Postingan = sequelize.define('postingan', {
+  const Postingan = sequelize.define('Postingan', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'pengguna', // Pastikan nama model sesuai dengan nama tabel di database
+        model: 'users',
         key: 'id',
       },
     },
@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'kategori', // Pastikan nama model sesuai dengan nama tabel di database
+        model: 'kategori',
         key: 'id',
       },
     },
@@ -37,20 +37,12 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    status: {
-      type: DataTypes.STRING(15),
-      defaultValue: 'aktif',
-      validate: {
-        isIn: [['draf', 'aktif', 'terarsip']],
-      },
-    },
     dibuat_pada: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-        get() {
-        // Menambahkan konversi waktu WIB pada saat pengambilan data
+      defaultValue: Sequelize.NOW,
+      get() {
         const value = this.getDataValue('dibuat_pada');
-        return toWIB(value);  // Menggunakan fungsi toWIB untuk konversi ke WIB
+        return toWIB(value);
       }
     },
   }, {
@@ -59,7 +51,7 @@ module.exports = (sequelize) => {
   });
 
   Postingan.associate = (models) => {
-    Postingan.belongsTo(models.Pengguna, {
+    Postingan.belongsTo(models.User, {
       foreignKey: 'id_penulis',
       as: 'penulis',
     });

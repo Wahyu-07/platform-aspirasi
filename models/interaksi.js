@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { toWIB } = require('../utils/waktu');
 
-// Mendefinisikan model Interaksi
 module.exports = (sequelize) => {
   const Interaksi = sequelize.define('Interaksi', {
     id: {
@@ -10,8 +9,8 @@ module.exports = (sequelize) => {
       autoIncrement: true,
     },
     tipe: {
-    type: DataTypes.ENUM('suka', 'lapor', 'simpan'),
-    allowNull: false,
+      type: DataTypes.ENUM('upvote', 'downvote', 'lapor'),
+      allowNull: false,
     },
     id_pengguna: {
       type: DataTypes.INTEGER,
@@ -28,11 +27,10 @@ module.exports = (sequelize) => {
     dibuat_pada: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-        get() {
-        // Menambahkan konversi waktu WIB pada saat pengambilan data
+      get() {
         const value = this.getDataValue('dibuat_pada');
-        return toWIB(value);  // Menggunakan fungsi toWIB untuk konversi ke WIB
-      }
+        return toWIB(value);
+      },
     },
   }, {
     tableName: 'interaksi',
@@ -40,7 +38,7 @@ module.exports = (sequelize) => {
   });
 
   Interaksi.associate = (models) => {
-    Interaksi.belongsTo(models.Pengguna, {
+    Interaksi.belongsTo(models.User, {
       foreignKey: 'id_pengguna',
       as: 'pengguna',
     });
